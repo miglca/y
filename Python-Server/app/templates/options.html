@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Notion AI My Mind Server Options!</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+	    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    </head>
+	<body>
+		<div class="jumbotron text-center">
+			<h1><img src="{{url_for('static', filename='icon.png')}}" width="30px" style="margin-right: 10px;"/>Notion AI My Mind Server</h1>
+			<form name="settings" id="settings" action="{{ url_for('handle_data') }}" method="post">
+				<h2>Options :</h2>
+                <div class="form-group">
+                    <label for="notion_url">Notion My Mind Structure URL</label>
+
+                    <input type="text" name="notion_url" id="notion_url" class="form-control"  aria-describedby="url_help" placeholder="Enter the URL">
+                    <small id="url_help" class="form-text text-muted">Please set the https:// at start. Don't know what is this url? More info here: <a href="https://github.com/elblogbruno/NotionAI-MyMind/wiki/Notion-AI-My-Mind-Collections">Notion AI My Mind Collections</a></small>
+
+                    <h3>Properties customization :</h3>
+                    <smalL>If you have set custom names to properties, you can set them here. More info<a href="https://github.com/elblogbruno/NotionAI-MyMind/wiki/Notion-AI-My-Mind-Collections#step-2-create-collections"> here</a> </smalL>
+
+                    <input type="text" name="multi_tag_property" id="multi_tag_property" class="form-control" placeholder="Enter the Multi-select property name. (If blank default will be named 'Tags')">
+                    <input type="text" name="mind_extension_property" id="mind_extension_property" class="form-control" placeholder="Enter the mind_extension property name. (If blank default will be named 'mind_extension')">
+                    <input type="text" name="ai_tags_property" id="ai_tags_property" class="form-control" placeholder="Enter the AITagsText  property name. (If blank default will be named 'AITagsText')">
+                    <input type="text" name="notion_date_property" id="notion_date_property" class="form-control" placeholder="Coming sooon....">
+                </div>
+
+                <h3>Location Options :</h3>
+                 <div class="form-group">
+                     <label for="language_code">Language</label>
+                     <select id="language_code" name="language_code" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+                        <option value="en_US">English</option>
+                        <option value="es_ES">Español</option>
+                     </select>
+                 </div>
+
+                <h3>Login options: </h3>
+                <p> If you reload the server, you will need to enter the email and password again if using this credential system. It is so, so your password or email is not stored on the server. If you instead use the TokenV2 login method it will be saved and used on the next startup of the server.</p>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Email address</label>
+                    <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+                    <small id="emailHelp" class="form-text text-muted">Server will never share your email with anyone else.</small>
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputPassword1">Password</label>
+                    <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                  </div>
+                <h3>or </h3>
+				<div class="form-group">
+                    <label for="notion_token">Notion TokenV2</label>
+                    <input type="text" name="notion_token" id="notion_token" class="form-control"  aria-describedby="token_help" placeholder="Enter the Token v2">
+                    <small id="token_help" class="form-text text-muted">This can be obtained looking at the cookies or the extension. More info here: <a href="https://github.com/elblogbruno/NotionAI-MyMind/wiki/Getting-the-credentials.">Getting the credentials.</a></small>
+                </div>
+                <h2>Image tagging options: </h2>
+                <a href="https://github.com/elblogbruno/NotionAI-MyMind/wiki/Getting-the-credentials.#ai-tagging">AI Tagging Info</a>
+                <div class="form-group">
+                    <label for="notion_token">Clarifai API key</label>
+                    <input type="text" name="clarifai_key" id="clarifai_key" class="form-control"  aria-describedby="clarifai_help" placeholder="Enter the Clarifai API key">
+                    <small id="clarifai_help" class="form-text text-muted"> This can be obtained for free at Clarifai website</small>
+                </div>
+                <p>If you enter a clarifai api key, clarifai will be used. (Clarifai is cloud base, non gpu dependant, image is tagged on clarifai's servers)
+                    if you leave it blank it will use local tensorflow (will use cores of your server but image will be processed locally)</p>
+                <div class="form-group form-check">
+                    <input type="checkbox" class="form-check-input"  name= "delete_after_tagging" id="delete_after_tagging" >
+                    <label class="form-check-label" for="delete_after_tagging">Would you like images to be deleted after tagging (deleted from server not notion)?</label>
+                </div>
+                <div class="form-group">
+                    <label for="confidence_treshold">Confidence Treshold</label>
+                    <input type="text" name="confidence_treshold" id="confidence_treshold" class="form-control"  aria-describedby="treshold_help" placeholder="Enter the Confidence Treshold.">
+                    <small id="treshold_help" class="form-text text-muted"> You can enter a number that goes from 0.01 to 1 (Being 1, 100%) This allows you to set the confidence of the AI tagging system tagging images.</small>
+                </div>
+                <input class="btn btn-primary btn-sm" role="button" type="button" onclick="postData()" value="Save">
+
+                 <p style="margin-top:50px;"> If you have downloaded the iphone app, you can scan this QR Code, so you configure the app in seconds.</strong></p>
+                <div style="display: flex; margin-top:50px; justify-content: center;" id="qrcode"> </div>
+      		</form>
+		</div>
+
+        <script type="text/javascript">
+            function get(name){
+               if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
+                  return decodeURIComponent(name[1]);
+            }
+
+            var token = get('tokenv2_from_extension');
+            console.log(token);
+            if (token != null)
+            {
+                document.getElementById("notion_token").value = token;
+                alert("Congrats, Notion Token V2 was found on your browser and it was Autocompleted! You still can log in with your Notion email and password of course!");
+            }
+
+            alert("You should fill this settings in order to get the best experience out of Notion AI My Mind!");
+
+
+
+            new QRCode(document.getElementById("qrcode"), "http://"+document.location.host+"/");
+<!--           https://stackoverflow.com/questions/11338774/serialize-form-data-to-json-->
+            // convert the form to JSON
+            function getFormData($form){
+                var unindexed_array = $form.serializeArray();
+                var indexed_array = {};
+
+                $.map(unindexed_array, function(n, i){
+                    indexed_array[n['name']] = n['value'];
+                });
+
+                return indexed_array;
+            }
+
+            function postData()
+            {
+                var $form = $("#settings");
+                var data = getFormData($form);
+
+                fetch('/handle_data', {
+                    // Declare what type of data we're sending
+                    headers: {
+                      'Content-Type': 'application/json'
+                    },
+
+                    // Specify the method
+                    method: 'POST',
+
+                    redirect: 'follow',
+                    // A JSON payload
+
+                    body: JSON.stringify(data)
+                }).then(function (response) { // At this point, Flask has printed our JSON
+                    return response.text();
+                }).then(function (text) {
+
+                    console.log('POST response: ');
+
+                    // Should be 'OK' if everything was successful
+                    console.log(text);
+
+                    if (text == "200")
+                    {
+                         window.location.href = '{{ url_for('static',filename='thank_you.html') }}';
+                    }else{
+                         window.location.href = '{{ url_for('static',filename='error.html') }}';
+                    }
+                });
+            }
+        </script>
+
+    </body>
+</html>
